@@ -22,96 +22,156 @@ import ScreenBrightness from 'react-native-screen-brightness';
 
 const TorchComponent = () => {
 
-    let  cameraAllowed;
-useEffect(()=>{
+    const initial = {
+        torchStatus: true,
+        mode: 'TORCH',
+        splash: false
 
-   cameraAllowed = Torch.requestCameraPermission(
-        'Camera Permissions', // dialog title
-        'We require camera permissions to use the torch on the back of your phone.' // dialog body
-    );
-
-    if (!cameraAllowed) {
-        Alert.alert('Permission Denied')
     }
+    const initialCommon = {
+        lightElevation: 3,
+        indicatorElevation: 0,
+        screenElevation: 0,
+        statusBarVisible:true
+
+    }
+
+
+    const [brightness, setBrightness] = useState(0)
+    const [torch, setTorch] = useState(initial)
+    const [camPer,setCamPer] = useState(null)
+    const [brightnessPer,setBrightnessPer] = useState(null)
+    const [common,setCommon] = useState(initialCommon)
    
 
-    ScreenBrightness.getBrightness().then(brightness => {
-        console.log('brightness', brightness);
-        setBrightness(brightness)
-      });
-})
-    const initial={
-        torchStatus:true,
-        mode:'TORCH',
-        splash:false
-
+    const checkCameraPermission = async () => {
+        const cameraAllowed = await Torch.requestCameraPermission('Permission Required','Give Camera Permission for Access LED');
+        if (!cameraAllowed) {
+            Alert.alert('Camera Permission Required')
+        } else {
+            console.log('Camera Permission Approved');
+        }
+        setCamPer(cameraAllowed)
     }
 
-    const brightnessCalculation = async(data) => {
-        let brightnessPoint;
-console.log('data', data)
-        if(data==='full'){
-            
-            brightnessPoint = 1
-       
-        }else{
-            brightnessPoint = brightness/255
-            
+
+    const setInitialBrightnessLevel = () => {
+        ScreenBrightness.getBrightness().then(brightness => {
+            console.log('brightness', brightness);
+            setBrightness(brightness)
+        });
+    }
+
+
+    const RequestPermissionBrightnessControl = async () => {
+        let hasPerm = await ScreenBrightness.hasPermission();
+        let permission = false
+        permission = await ScreenBrightness.requestPermission();
+        if (!hasPerm) {
+            console.log('Redirecting to Setting....')
+            return;
+        } else {
+            console.log('Denied to Redirecting to Setting....')
 
         }
-        
+        console.log('Brightness Permission status....',permission,hasPerm)
+        setBrightnessPer(hasPerm)
+    }
+
+    useEffect(() => {
+        checkCameraPermission()
+        setInitialBrightnessLevel()
+        RequestPermissionBrightnessControl();
+    }, [])
+
+
+    
+    
+    const brightnessCalculation = async (data) => {
+        let brightnessPoint;
+        console.log('data', data)
+        if (data === 'full') {
+
+            brightnessPoint = 1
+
+        } else {
+            brightnessPoint = brightness / 255
+
+
+        }
+
         let hasPerm = await ScreenBrightness.hasPermission();
-        if(!hasPerm){
+        if (!hasPerm) {
             ScreenBrightness.requestPermission();
             return;
-       }
-       console.log((Number(brightnessPoint.toFixed(1))),'dfhjk')
-       ScreenBrightness.setBrightness(Number(brightnessPoint.toFixed(1)));
+        }
+        console.log((Number(brightnessPoint.toFixed(1))), 'dfhjk')
+        ScreenBrightness.setBrightness(Number(brightnessPoint.toFixed(1)));
 
-        
-        
+
+
 
     }
 
-    const [brightness,setBrightness] = useState(0)
+   
 
-    const [torch,setTorch] = useState(initial)
-
-    const torchOnPress=()=>{
-        if(torch.mode==='TORCH'){
-            setTorch({...torch,
-                torchStatus:!torch.torchStatus
+    const torchOnPress = async() => {
+        if (torch.mode === 'TORCH') {
+            let status = !torch.torchStatus
+            if(!torch.torchStatus){
+                setCommon({
+                    ...common,
+                    indicatorElevation:0
+                })
     
+            }else{
+                setCommon({
+                    ...common,
+                    indicatorElevation:10
+                })
+    
+
             }
-              
-            )
-            if (Platform.OS === 'ios') {
-                Torch.switchState(torch.torchStatus);
-            } else {
-             
-                if (cameraAllowed) {
+           
+
+                if (camPer) {
+                    setTorch({
+                        ...torch,
+                        torchStatus: status
+                    })
                     Torch.switchState(torch.torchStatus);
                 }
-            }
             
-
-        }else{
-            if(!torch.splash){
+        } else {
+            let status = !torch.splash
+            if (!torch.splash) {
                 brightnessCalculation('full')
-               
-            }else{
+                await setCommon({
+                    ...common,
+                    statusBarVisible:false
+                })
+
+            } else {
                 brightnessCalculation('initial')
+                await setCommon({
+                    ...common,
+                    statusBarVisible:true
+                })
             }
-            setTorch({...torch,
-                splash:!torch.splash,
+
+
+
+            setTorch({
+                ...torch,
+                splash:status,
                 //mode:torch.splash? 'TORCH'
-    
+
             })
-            
-            
+
+
         }
-        console.log('press',torch.torchStatus)
-       
+        //console.log('press', torch.torchStatus)
+
 
     }
 
@@ -119,30 +179,47 @@ console.log('data', data)
     const setMode = (data) => {
         setTorch({
             ...torch,
-            mode:data
+            mode: data
         })
+
+        if(data=='TORCH'){
+            setCommon({
+                ...common,
+                screenElevation:0,
+                lightElevation:5
+            })
+
+        }else{
+            setCommon({
+                ...common,
+                screenElevation:5,
+                lightElevation:0
+            })
+
+        }
+       
     }
 
 
 
-console.log('tor',torch.torchStatus)
+    console.log('tor', torch.torchStatus)
     return (
         <View style={styles.mainContainer}>
-            <StatusBar backgroundColor={Colors.mainBackground} barStyle={"light-content"}/>
+            <StatusBar backgroundColor={Colors.mainBackground} barStyle={"light-content"} hidden={false} />
             <View style={styles.subContainer}>
                 <View style={styles.LedIndicatorContainer}>
-                    <View elevation={5} style={torch.torchStatus
-                                  ? styles.ledIndicatorCardTrue
-                                  : styles.ledIndicatorCardFalse
-                                }
-                                
-                                
-                               >
+                    <View elevation={common.indicatorElevation} style={torch.torchStatus
+                        ? styles.ledIndicatorCardTrue
+                        : styles.ledIndicatorCardFalse
+                    }
+
+
+                    >
                         <Image
-                        source={torch.torchStatus
-                            ? ImageLocation.torchIcon1
-                            : ImageLocation.torchIcon2}
-                        style={{width:50,height:50}}>
+                            source={torch.torchStatus
+                                ? ImageLocation.torchIcon1
+                                : ImageLocation.torchIcon2}
+                            style={{ width: 50, height: 50 }}>
 
                         </Image>
 
@@ -151,36 +228,36 @@ console.log('tor',torch.torchStatus)
                 </View>
 
                 <View style={[styles.powerIconContainer]}>
-                    <TouchableOpacity 
-                    onPress={torchOnPress}
-                    style={{width: 200, height: 200}}>
-                    <Image 
-                        source={ImageLocation.powerIconWhite}
+                    <TouchableOpacity
+                        onPress={torchOnPress}
                         style={{ width: 200, height: 200 }}>
+                        <Image
+                            source={ImageLocation.powerIconWhite}
+                            style={{ width: 200, height: 200 }}>
 
-                    </Image>
+                        </Image>
 
                     </TouchableOpacity>
-                    
+
 
                 </View>
 
                 <View style={styles.modeContainer}>
 
-                    <View elevation={3} style={[styles.ledModeContainer,{backgroundColor:torch.mode=='TORCH'? Colors.highLightColor:Colors.mainBackground}]}>
+                    <View elevation={common.lightElevation} style={[styles.ledModeContainer, { backgroundColor: torch.mode == 'TORCH' ? Colors.highLightColor : Colors.mainBackground }]}>
                         <TouchableOpacity
                             onPress={() => setMode('TORCH')}
                             style={styles.torchButton}>
-                            <Text style={[styles.torchLable,{color:torch.mode=='TORCH'? Colors.mainBackground:Colors.highLightColor}]}>Light</Text>
+                            <Text style={[styles.torchLable, { color: torch.mode == 'TORCH' ? Colors.mainBackground : Colors.highLightColor }]}>LIGHT</Text>
                         </TouchableOpacity>
 
                     </View>
 
-                    <View elevation={3} style={[styles.screenModeContainer,{backgroundColor:torch.mode=='TORCH'? Colors.mainBackground:Colors.highLightColor}]}>
+                    <View elevation={common.screenElevation} style={[styles.screenModeContainer, { backgroundColor: torch.mode == 'TORCH' ? Colors.mainBackground : Colors.highLightColor }]}>
                         <TouchableOpacity
                             onPress={() => setMode('SCREEN')}
                             style={styles.screenButton}>
-                            <Text style={[styles.screenLable,{color:torch.mode=='TORCH'? Colors.highLightColor:Colors.mainBackground}]}>Screen</Text>
+                            <Text style={[styles.screenLable, { color: torch.mode == 'TORCH' ? Colors.highLightColor : Colors.mainBackground }]}>SCREEN</Text>
 
                         </TouchableOpacity>
 
@@ -190,9 +267,9 @@ console.log('tor',torch.torchStatus)
 
             </View>
             <SplashModal
-            visible={torch.splash}
-            torchOnPress={torchOnPress}
-            
+                visible={torch.splash}
+                torchOnPress={torchOnPress}
+
             />
 
 
@@ -229,7 +306,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: Colors.highLightColor,
         borderWidth: 1,
-        backgroundColor:Colors.mainBackground
+        backgroundColor: Colors.mainBackground
     },
     ledIndicatorCardFalse: {
         height: 80,
@@ -239,7 +316,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: Colors.highLightColor,
         borderWidth: 1,
-        backgroundColor:Colors.highLightColor
+        backgroundColor: Colors.highLightColor
     },
     powerIconContainer: {
         // backgroundColor:'yellow',
@@ -283,11 +360,11 @@ const styles = StyleSheet.create({
     },
     torchLable: {
         color: '#1e1e1e',
-        fontSize:25
+        fontSize: 25
     },
     screenLable: {
         color: 'white',
-        fontSize:25
+        fontSize: 25
     },
 
 })

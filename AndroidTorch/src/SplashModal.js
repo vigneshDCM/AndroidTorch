@@ -17,6 +17,9 @@ import ImageLocation from './constants/ImageLocation'
 
 const Torch = (props) => {
 
+
+
+
     const initial={
         torchStatus:false,
         mode:'TORCH',
@@ -60,7 +63,7 @@ console.log('tor',torch.torchStatus)
 
        
         <View style={styles.mainContainer}>
-        <StatusBar backgroundColor={'white'} barStyle={"dark-content"}/>
+       
             <View style={styles.subContainer}>
                
 
