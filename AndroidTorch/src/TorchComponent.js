@@ -2,14 +2,10 @@ import React, { useState, useEffect } from 'react'
 import {
     View,
     Text,
-    Animated,
     StyleSheet,
-    Easing,
     Image,
-    Modal,
     TouchableOpacity,
     StatusBar,
-    platform,
     Alert
 } from 'react-native'
 import Torch from 'react-native-torch';
@@ -18,6 +14,8 @@ import SplashModal from './SplashModal'
 import Colors from './constants/Colors'
 import ImageLocation from './constants/ImageLocation'
 import ScreenBrightness from 'react-native-screen-brightness';
+import PowerButton from './components/animations/PowerButton'
+import ButtonComponentHOC from './components/animations/ButtonComponentHOC'
 
 
 const TorchComponent = () => {
@@ -228,40 +226,41 @@ const TorchComponent = () => {
                 </View>
 
                 <View style={[styles.powerIconContainer]}>
-                    <TouchableOpacity
-                        onPress={torchOnPress}
-                        style={{ width: 200, height: 200 }}>
-                        <Image
-                            source={ImageLocation.powerIconWhite}
-                            style={{ width: 200, height: 200 }}>
-
-                        </Image>
-
-                    </TouchableOpacity>
+                <PowerButton
+                onPress={torchOnPress}
+                />
+                  
 
 
                 </View>
 
                 <View style={styles.modeContainer}>
 
-                    <View elevation={common.lightElevation} style={[styles.ledModeContainer, { backgroundColor: torch.mode == 'TORCH' ? Colors.highLightColor : Colors.mainBackground }]}>
-                        <TouchableOpacity
+                    <ButtonComponentHOC onPressTouch={() => setMode('TORCH')}
+                    elevation={common.lightElevation} 
+                    styleTouch={styles.torchButton}
+                    style={[styles.ledModeContainer, { backgroundColor: torch.mode == 'TORCH' ? Colors.highLightColor : Colors.mainBackground }]}>
+                        {/* <TouchableOpacity
                             onPress={() => setMode('TORCH')}
-                            style={styles.torchButton}>
+                            style={styles.torchButton}> */}
                             <Text style={[styles.torchLable, { color: torch.mode == 'TORCH' ? Colors.mainBackground : Colors.highLightColor }]}>LIGHT</Text>
-                        </TouchableOpacity>
+                        {/* </TouchableOpacity> */}
 
-                    </View>
+                    </ButtonComponentHOC>
 
-                    <View elevation={common.screenElevation} style={[styles.screenModeContainer, { backgroundColor: torch.mode == 'TORCH' ? Colors.mainBackground : Colors.highLightColor }]}>
-                        <TouchableOpacity
+                    <ButtonComponentHOC 
+                    onPressTouch={() => setMode('SCREEN')}
+                    styleTouch={styles.screenButton}
+                    elevation={common.screenElevation} 
+                    style={[styles.screenModeContainer, { backgroundColor: torch.mode == 'TORCH' ? Colors.mainBackground : Colors.highLightColor }]}>
+                        {/* <TouchableOpacity
                             onPress={() => setMode('SCREEN')}
-                            style={styles.screenButton}>
+                            style={styles.screenButton}> */}
                             <Text style={[styles.screenLable, { color: torch.mode == 'TORCH' ? Colors.highLightColor : Colors.mainBackground }]}>SCREEN</Text>
 
-                        </TouchableOpacity>
+                        {/* </TouchableOpacity> */}
 
-                    </View>
+                    </ButtonComponentHOC>
 
                 </View>
 
