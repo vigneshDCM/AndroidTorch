@@ -16,9 +16,11 @@ import ImageLocation from './constants/ImageLocation'
 import ScreenBrightness from 'react-native-screen-brightness';
 import PowerButton from './components/animations/PowerButton'
 import ButtonComponentHOC from './components/animations/ButtonComponentHOC'
-
-
-const TorchComponent = () => {
+import NavigationBar from 'react-native-navbar-color'
+import {withTranslation} from 'react-i18next'
+import i18n from './config/I18n'
+const TorchComponent = (props) => {
+const {t} = props
 
     const initial = {
         torchStatus: true,
@@ -77,6 +79,7 @@ const TorchComponent = () => {
     }
 
     useEffect(() => {
+        NavigationBar.setColor(Colors.mainBackground)
         checkCameraPermission()
         setInitialBrightnessLevel()
         RequestPermissionBrightnessControl();
@@ -224,6 +227,22 @@ const TorchComponent = () => {
                     </View>
 
                 </View>
+                <View style={{height:50,width:'100%',flexDirection:'row'}}>
+                <TouchableOpacity 
+                style={{flex:1,alignItems:'center',justifyContent:'center',backgroundColor:'orange'}}
+                onPress={()=>i18n.changeLanguage('tam')}>
+                    <Text>Tamil</Text>
+
+                </TouchableOpacity>
+                <TouchableOpacity   
+                style={{flex:1,alignItems:'center',justifyContent:'center',backgroundColor:'orange'}}
+                onPress={()=>i18n.changeLanguage('en')}>
+                    <Text>English</Text>
+
+                </TouchableOpacity>
+
+                </View>
+                
 
                 <View style={[styles.powerIconContainer]}>
                 <PowerButton
@@ -243,7 +262,7 @@ const TorchComponent = () => {
                         {/* <TouchableOpacity
                             onPress={() => setMode('TORCH')}
                             style={styles.torchButton}> */}
-                            <Text style={[styles.torchLable, { color: torch.mode == 'TORCH' ? Colors.mainBackground : Colors.highLightColor }]}>LIGHT</Text>
+                            <Text style={[styles.torchLable, { color: torch.mode == 'TORCH' ? Colors.mainBackground : Colors.highLightColor }]}>{t('Common:buttons.light')}</Text>
                         {/* </TouchableOpacity> */}
 
                     </ButtonComponentHOC>
@@ -256,7 +275,7 @@ const TorchComponent = () => {
                         {/* <TouchableOpacity
                             onPress={() => setMode('SCREEN')}
                             style={styles.screenButton}> */}
-                            <Text style={[styles.screenLable, { color: torch.mode == 'TORCH' ? Colors.highLightColor : Colors.mainBackground }]}>SCREEN</Text>
+                            <Text style={[styles.screenLable, { color: torch.mode == 'TORCH' ? Colors.highLightColor : Colors.mainBackground }]}>{t('Common:buttons.screen')}</Text>
 
                         {/* </TouchableOpacity> */}
 
@@ -370,4 +389,4 @@ const styles = StyleSheet.create({
 
 
 
-export default TorchComponent
+export default withTranslation()(TorchComponent)

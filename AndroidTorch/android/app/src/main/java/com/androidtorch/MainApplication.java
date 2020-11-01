@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.bhavan.RNNavBarColor.RNNavBarColor;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.robinpowered.react.ScreenBrightness.ScreenBrightnessPackage;
 import com.cubicphuse.RCTTorch.RCTTorchPackage;
 import com.facebook.react.ReactInstanceManager;
