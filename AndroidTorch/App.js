@@ -18,11 +18,11 @@ import { I18nextProvider } from 'react-i18next';
 
 const App = () => {
 
-  useEffect(() => {
+  // useEffect(() => {
 
 
-    SplashScreen.hide();
-  }, []);
+  //   SplashScreen.hide();
+  // }, []);
 
   return (
     <>

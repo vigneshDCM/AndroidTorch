@@ -19,6 +19,8 @@ import ButtonComponentHOC from './components/animations/ButtonComponentHOC'
 import NavigationBar from 'react-native-navbar-color'
 import {withTranslation} from 'react-i18next'
 import i18n from './config/I18n'
+import SplashScreen from 'react-native-splash-screen'
+
 const TorchComponent = (props) => {
 const {t} = props
 
@@ -83,6 +85,13 @@ const {t} = props
         checkCameraPermission()
         setInitialBrightnessLevel()
         RequestPermissionBrightnessControl();
+      
+
+
+           setTimeout(()=>{
+            SplashScreen.hide();
+           },200) 
+       
     }, [])
 
 

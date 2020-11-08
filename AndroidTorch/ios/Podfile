@@ -12,6 +12,11 @@ target 'AndroidTorch' do
 
   pod 'react-native-screen-brightness', :path => '../node_modules/react-native-screen-brightness'
 
+
+  pod 'SRSRadialGradient', :path => '../node_modules/react-native-radial-gradient'
+
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
   target 'AndroidTorchTests' do

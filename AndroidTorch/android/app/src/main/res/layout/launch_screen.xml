@@ -7,14 +7,15 @@
 
 
     android:gravity="center"
-    android:background="@color/white">
+    android:background="@color/gray">
 
     <ImageView
 
         android:layout_width="100dp"
         android:layout_height="100dp"
-
+android:layout_marginTop="24dp"
         android:src="@mipmap/ic_launcher"
+
         />
 
 
