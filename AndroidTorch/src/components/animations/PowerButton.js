@@ -2,6 +2,7 @@ import React from 'react'
 import {View,Text,StyleSheet,Image, TouchableOpacity, Animated} from 'react-native'
 import Colors from '../../constants/Colors'
 import ImageLocation from '../../constants/ImageLocation'
+import LinearGradient from 'react-native-linear-gradient'; 
 const PowerButton = (props) => {
 
     const onPress = () => {
@@ -9,7 +10,7 @@ const PowerButton = (props) => {
 
     }
 
-    let initial = new Animated.Value(1)
+    let initial = new Animated.Value(0.9)
 
 
 
@@ -17,17 +18,19 @@ const PowerButton = (props) => {
         // setTimeout(()=>{
             
         // },1000)
+        
 
         Animated.sequence([
             Animated.timing(initial, {
+                toValue: .8,
+                duration: 100,
+                useNativeDriver: false
+             })
+             ,
+            Animated.timing(initial, {
                 toValue: .9,
                 duration: 100,
-                useNativeDriver: true
-            }),
-            Animated.timing(initial, {
-                toValue: 1,
-                duration: 100,
-                useNativeDriver: true
+                useNativeDriver: false
             })
 
         ]).start(()=>{
@@ -39,7 +42,9 @@ const PowerButton = (props) => {
         //     toValue:1,
         //     duration:300,
         //     useNativeDriver:true
-        // }).start()
+        // }).start(()=>{
+        //    // props.onPress()
+        // })
     }
 
 
@@ -55,33 +60,47 @@ const PowerButton = (props) => {
 
 
     return(
-        // <TouchableOpacity 
-        // onPress={onPress}
-        // elevation={2} 
-        // style={styles.mainContainer}>
+       
+<View style={[styles.mainContainer,{backgroundColor:'black',overflow:'hidden'}]}>
+<LinearGradient 
 
-        //     <View style={styles.subContainer}>
+colors={['black',  '#37444a','#37444a', 'black']} 
+            style={{ width:'100%',height:'100%'}}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            >
+<Animated.View 
+        //elevation={2} 
+        style={[styles.mainContainer,{overflow:'hidden',width:'100%',height:'100%'},containerAnimation]}>
+            <LinearGradient 
 
-        //     </View>
+colors={[Colors.mainBackground,  '#37444a','#37444a', Colors.mainBackground]} 
+            style={{ width:'100%',height:'100%'}}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            >
 
-        // </TouchableOpacity>
-        <Animated.View 
-        elevation={2} 
-        style={[styles.mainContainer,containerAnimation]}>
-            <TouchableOpacity
+             <TouchableOpacity
             style={{flex:1,
                 alignItems:'center',
                 justifyContent:'center'}}
                 onPress={press}>
-            {/* <View style={styles.subContainer}> */}
+         
             <Image
                             source={ImageLocation.powerIconWhite}
                             style={styles.subContainer}></Image>
 
-    {/* </View> */}
+   
 
-            </TouchableOpacity>
+            </TouchableOpacity> 
+
+            </LinearGradient>
         </Animated.View>
+        </LinearGradient>
+
+</View>
+
+        
     )
 }
 
@@ -90,8 +109,9 @@ const styles =StyleSheet.create({
         width:230,
         height:230,
         backgroundColor:Colors.mainBackground,
-        borderWidth:5,
-        borderColor:Colors.highLightColor,
+        //backgroundColor:Colors.mainBackground,
+        borderWidth:2,
+        borderColor:Colors.mainBackground,
         borderRadius:120,
         alignItems:'center',
         justifyContent:'center'

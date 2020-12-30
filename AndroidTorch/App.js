@@ -1,40 +1,39 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React from 'react'
+// import {View} from 'react-native'
+ import Bridge from './src/containers/startup/Bridge'
 
-import React,{useEffect} from 'react';
-import {
-  SafeAreaView,
- 
-} from 'react-native';
-import TorchComponent from './src/TorchComponent'
-import SplashScreen from 'react-native-splash-screen'
-import i18n from './src/config/I18n';
-import { I18nextProvider } from 'react-i18next';
 
+// import SplashScreen from 'react-native-splash-screen'
 const App = () => {
+ // SplashScreen.hide();
 
-  // useEffect(() => {
-
-
-  //   SplashScreen.hide();
-  // }, []);
-
+  if(process.env.NODE_ENV === 'production') {
+    // eslint-disable-next-line
+    console = {};
+    console.log = () => {};
+    console.error = () => {};
+    console.warn = () => {};
+  
+    console.assert = () => {};
+    console.clear = () => {};
+    console.count = () => {};
+    console.group = () => {};
+    console.groupCollapsed = () => {};
+    console.groupEnd = () => {};
+    console.info = () => {};
+    console.table = () => {};
+    console.time = () => {};
+    console.timeEnd = () => {};
+    console.trace = () => {};
+  
+  }
   return (
-    <>
-       <I18nextProvider i18n={i18n}>
-       <TorchComponent/>
-       </I18nextProvider>
-       
-       
-     
-    </>
+       <Bridge/>
   );
 };
+
+
+
 
 
 

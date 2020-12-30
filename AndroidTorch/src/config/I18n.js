@@ -1,12 +1,21 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-//import i18nextReactNative from 'i18next-react-native-language-detector';
+import i18nextReactNative from 'i18next-react-native-language-detector'
 
 
-
-//import LanguageDetector from 'i18next-browser-languagedetector';
 import common_en from '../locales/en/common_en.json'
 import common_tam from '../locales/tam/common_tam.json'
+import common_hin from '../locales/hin/common_hin.json'
+import common_tel from '../locales/tel/common_tel.json'
+import common_nepali from '../locales/nepali/common_nepali.json'
+import common_marathi from '../locales/marathi/common_marathi.json'
+import common_punjabi from '../locales/punjabi/common_punjabi.json'
+import common_odia from '../locales/odia/common_odia.json'
+import common_kannada from '../locales/kannada/common_kannada.json'
+import common_gujarati from '../locales/gujarati/common_gujarati.json'
+import common_bengali from '../locales/bengali/common_bengali.json'
+
+
 
 
 
@@ -23,7 +32,7 @@ i18n
   .use(initReactI18next)
   // detect user language
   // learn more: https://github.com/i18next/i18next-browser-languageDetector
-  //.use(LanguageDetector)
+  .use(i18nextReactNative)
   // pass the i18n instance to react-i18next.
 
   // init i18next
@@ -36,6 +45,33 @@ i18n
       tam: {
         Common: common_tam,
       },
+      hin :{
+        Common: common_hin,
+      },
+      tel :{
+        Common: common_tel,
+      },
+      nepali: {
+        Common: common_nepali,
+      },
+      marathi: {
+        Common: common_marathi,
+      },
+      punjabi :{
+        Common: common_punjabi,
+      },
+      odia :{
+        Common: common_odia,
+      },
+      kannada: {
+        Common: common_kannada,
+      },
+      gujarati: {
+        Common: common_gujarati,
+      },
+      bengali :{
+        Common: common_bengali,
+      }
     },
     fallbackLng: 'en',
     ns: [
@@ -51,7 +87,7 @@ i18n
     },
 
     react: {
-      useSuspense: false,
+      useSuspense: true,
       wait: false
     }
   });

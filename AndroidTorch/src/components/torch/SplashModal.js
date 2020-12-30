@@ -11,8 +11,8 @@ import {
     TouchableOpacity,
 
 } from 'react-native'
-import Colors from './constants/Colors'
-import ImageLocation from './constants/ImageLocation'
+import Colors from '../../constants/Colors'
+import ImageLocation from '../../constants/ImageLocation'
 
 
 const Torch = (props) => {
