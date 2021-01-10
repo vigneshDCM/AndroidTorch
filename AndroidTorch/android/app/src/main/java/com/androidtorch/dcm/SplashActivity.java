@@ -1,4 +1,4 @@
-package com.androidtorch;
+package com.androidtorch.dcm;
 
 import android.content.Intent;
 import android.os.Bundle;

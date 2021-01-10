@@ -1,7 +1,8 @@
-package com.androidtorch;
+package com.androidtorch.dcm;
 
 import android.app.Application;
 import android.content.Context;
+
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.horcrux.svg.SvgPackage;
@@ -26,7 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
       new ReactNativeHost(this) {
         @Override
         public boolean getUseDeveloperSupport() {
-          return BuildConfig.DEBUG;
+            return BuildConfig.DEBUG;
         }
 
         @Override
@@ -73,7 +74,7 @@ public class MainApplication extends Application implements ReactApplication {
          We use reflection here to pick up the class that initializes Flipper,
         since Flipper library is not available in release mode
         */
-        Class<?> aClass = Class.forName("com.androidtorch.ReactNativeFlipper");
+        Class<?> aClass = Class.forName("com.androidtorch.dcm.ReactNativeFlipper");
         aClass
             .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
             .invoke(null, context, reactInstanceManager);

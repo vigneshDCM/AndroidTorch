@@ -1,4 +1,4 @@
-package com.androidtorch;
+package com.androidtorch.dcm;
 
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;
@@ -22,6 +22,6 @@ public class MainActivity extends ReactActivity {
 
   @Override
   protected String getMainComponentName() {
-    return "AndroidTorch";
+    return "dcm";
   }
 }
