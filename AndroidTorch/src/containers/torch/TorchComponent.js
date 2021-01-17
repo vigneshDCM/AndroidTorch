@@ -4,7 +4,6 @@ import {
     Text,
     StyleSheet,
     Image,
-    TouchableOpacity,
     StatusBar,
     Alert
 } from 'react-native'
@@ -23,15 +22,12 @@ import SplashScreen from 'react-native-splash-screen'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
 import LanguageSlider from '../../components/torch/LanguageSlider'
+// import LanguageSlider from '../../components/torch/TempLanguageSlider'
 import i18n from '../../config/I18n'
 
 import Svg, {
-
     G,
-
-
     Rect,
-
 } from 'react-native-svg';
 
 const TorchComponent = (props) => {
@@ -329,22 +325,6 @@ const TorchComponent = (props) => {
                             onPress={torchOnPress}
                         />
                     </View>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     <View style={styles.modeContainer}>
 
                         <ButtonComponentHOC onPressTouch={() => setMode('TORCH')}

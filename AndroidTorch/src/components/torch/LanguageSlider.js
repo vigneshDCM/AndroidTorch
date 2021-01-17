@@ -1,11 +1,11 @@
-import React,{useState,useEffect} from 'react'
-import { View, Text, Image,ScrollView, I18nManager, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, Text, Image, ScrollView, I18nManager, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 import SlidingUpPanel from 'rn-sliding-up-panel';
-import ImageLocation from '../../constants/ImageLocation'
+// import ImageLocation from '../../constants/ImageLocation'
 import Colors from '../../constants/Colors'
 
 var deviceHeight = Dimensions.get('window').height;
-var deviceWidth = Dimensions.get('window').width;
+// var deviceWidth = Dimensions.get('window').width;
 import i18n from '../../config/I18n'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LanguageSquare from './LanguageSquare'
@@ -15,63 +15,48 @@ const SAFE_VIEW_HEIGHT = 60
 const LanguageSlider = (props) => {
 
     let panel = null
-    //React.createRef();
 
-    const [langFocus,setLangFocus] = useState({
-        // tam:false,
-        // en:false,
-        // hin:false,
-        // tel:false,
-        // bengali:false,
-        // gujarati:false,
-        // kannada:false,
-        // odia:false,
-        // punjabi:false,
-        // marathi:false,
-        // nepali:false,
+    const [langFocus, setLangFocus] = useState({})
 
-    })
-
-    useEffect(()=>{
-        if(props.lang!==null){
+    useEffect(() => {
+        if (props.lang !== null) {
             setLangFocus({
-              //  ...langFocus,
-                [props.lang]:true
+                [props.lang]: true
             })
+
         }
-        
 
-    },[props.lang])
+    }, [props.lang])
 
+    const [allowDragging, setAllowDragging] = useState(true)
 
     const changeLanguage = async (lang, p) => {
-
-
-
         try {
             i18n.changeLanguage(lang);
-           
-
-           
             await setLangFocus({
-                    // ...langFocus,
-                     [lang]:true
-                 })
-      
-            
-
+                [lang]: true
+            })
             await AsyncStorage.setItem('lang', lang)
-            
             panel.hide()
         } catch (e) {
             p.hide()
-            // saving error
         }
-
-
-
-
     }
+
+
+
+    // const onScroll = (event)=>{
+    //     var currentOffset = event.nativeEvent.contentOffset.y;
+    //     var direction = currentOffset > offSet ? 'down' : 'up';
+    //     // setOffSet(currentOffset)
+    //     //  if(currentOffset == 0){
+    //     //     setIsScrollable(false)
+    //     //  }else{
+    //     //      setIsScrollable(true)
+    //     //  }
+
+    //   // console.log(direction,'currentOffset:',currentOffset,event.nativeEvent);
+    //   }
 
 
 
@@ -83,18 +68,10 @@ const LanguageSlider = (props) => {
             containerStyle={{ marginHorizontal: -30, }}
             friction={0.4}
             draggableRange={{ top: deviceHeight - SAFE_VIEW_HEIGHT, bottom: 25 }}
-        //  draggableRange={{ top: 100, bottom: 20 }}
-        >
-            <View style={{
-                alignItems: 'center',
-                flex: 1,
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                borderColor: Colors.highLightColor,
-                borderWidth: 0.2,
+            allowDragging={allowDragging}
 
-                backgroundColor: Colors.mainBackground
-            }}>
+        >
+            <View style={styles.mainDragView}>
                 {/* <Image
                     source={ImageLocation.mArrow}
                     style = {{transform:[
@@ -108,109 +85,84 @@ const LanguageSlider = (props) => {
 
                     /> */}
 
-                <View style={{
-                    backgroundColor: Colors.highLightColor, marginTop: 30, width: 50,
-                    height: 2
-                }}>
+                <View style={styles.dragHandler}/>
 
-                </View>
+             
                 <View style={styles.languageListContainer}>
 
-<ScrollView style={{width:'100%'}}>
+                    <ScrollView style={{ width: '100%' }}
+                        onTouchStart={() => setAllowDragging(false)}
+                        onTouchEnd={() => setAllowDragging(true)}
+                        onTouchCancel={() => setAllowDragging(true)}
+                    >
 
-<LanguageSquare
-                        text={"Tamil"}
-                        onPress={() => changeLanguage("tam", panel)}
-                        selected={langFocus.tam}
-                    />
+                        <LanguageSquare
+                            text={"Tamil"}
+                            onPress={() => changeLanguage("tam", panel)}
+                            selected={langFocus.tam}
+                        />
 
-                    <LanguageSquare
-                        text={"English"}
-                        onPress={() => changeLanguage("en", panel)}
-                        selected={langFocus.en}
-                    />
-                    <LanguageSquare
-                        text={"Hindi"}
-                        onPress={() => changeLanguage("hin", panel)}
-                        selected={langFocus.hin}
-                    />
-                    <LanguageSquare
-                        text={"Telugu"}
-                        onPress={() => changeLanguage("tel", panel)}
-                        selected={langFocus.tel}
-                    />
+                        <LanguageSquare
+                            text={"English"}
+                            onPress={() => changeLanguage("en", panel)}
+                            selected={langFocus.en}
+                        />
+                        <LanguageSquare
+                            text={"Hindi"}
+                            onPress={() => changeLanguage("hin", panel)}
+                            selected={langFocus.hin}
+                        />
+                        <LanguageSquare
+                            text={"Telugu"}
+                            onPress={() => changeLanguage("tel", panel)}
+                            selected={langFocus.tel}
+                        />
 
-                    <LanguageSquare
-                        text={"Bengali"}
-                        onPress={() => changeLanguage("bengali", panel)}
-                        selected={langFocus.bengali}
-                        
-                    />
+                        <LanguageSquare
+                            text={"Bengali"}
+                            onPress={() => changeLanguage("bengali", panel)}
+                            selected={langFocus.bengali}
 
-                    <LanguageSquare
-                        text={"Gujarati"}
-                        onPress={() => changeLanguage("gujarati", panel)}
-                        selected={langFocus.gujarati}
-                    />
-                    <LanguageSquare
-                        text={"Kannada"}
-                        onPress={() => changeLanguage("kannada", panel)}
-                        selected={langFocus.kannada}
-                    />
-                    <LanguageSquare
-                        text={"Odia"}
-                        onPress={() => changeLanguage("odia", panel)}
-                        selected={langFocus.odia}
-                    />
+                        />
 
-                    <LanguageSquare
-                        text={"Punjabi"}
-                        onPress={() => changeLanguage("punjabi", panel)}
-                        selected={langFocus.punjabi}
-                    />
+                        <LanguageSquare
+                            text={"Gujarati"}
+                            onPress={() => changeLanguage("gujarati", panel)}
+                            selected={langFocus.gujarati}
+                        />
+                        <LanguageSquare
+                            text={"Kannada"}
+                            onPress={() => changeLanguage("kannada", panel)}
+                            selected={langFocus.kannada}
+                        />
+                        <LanguageSquare
+                            text={"Odia"}
+                            onPress={() => changeLanguage("odia", panel)}
+                            selected={langFocus.odia}
+                        />
 
-                    <LanguageSquare
-                        text={"Marathi"}
-                        onPress={() => changeLanguage("marathi", panel)}
-                        selected={langFocus.marathi}
-                    />
-                    <LanguageSquare
-                        text={"Nepali"}
-                        onPress={() => changeLanguage("nepali", panel)}
-                        selected={langFocus.nepali}
-                    />
-                    <View style={{height:200,width:80}}>
+                        <LanguageSquare
+                            text={"Punjabi"}
+                            onPress={() => changeLanguage("punjabi", panel)}
+                            selected={langFocus.punjabi}
+                        />
 
-                    </View>
+                        <LanguageSquare
+                            text={"Marathi"}
+                            onPress={() => changeLanguage("marathi", panel)}
+                            selected={langFocus.marathi}
+                        />
+                        <LanguageSquare
+                            text={"Nepali"}
+                            onPress={() => changeLanguage("nepali", panel)}
+                            selected={langFocus.nepali}
+                        />
 
+                        <View style={{ height: 200, width: 80 }}/>
+                      
 
-</ScrollView>
-                    
-
-
-
-
-
-                    {/* <TouchableOpacity onPress={()=>changeLanguage("tam",panel)}>
-                        <Text style={styles.languageLabel}>Tamil</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>changeLanguage("en",panel)}>
-                    <Text style={styles.languageLabel}>English</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={()=>changeLanguage("hin",panel)}>
-                    <Text style={styles.languageLabel}>Hindi</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={()=>changeLanguage("tel",panel)}>
-                    <Text style={styles.languageLabel}>Telugu</Text>
-                    </TouchableOpacity> */}
-
-
+                    </ScrollView>
                 </View>
-
-
-
             </View>
         </SlidingUpPanel>
 
@@ -220,6 +172,22 @@ const LanguageSlider = (props) => {
 
 
 const styles = StyleSheet.create({
+    mainDragView:{
+        alignItems: 'center',
+        flex: 1,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        borderColor: Colors.highLightColor,
+        borderWidth: 0.2,
+
+        backgroundColor: Colors.mainBackground
+    },
+    dragHandler:{
+        backgroundColor: Colors.highLightColor, 
+        marginTop: 30, 
+        width: 50,
+        height: 2
+    },
     languageLabel: {
         fontSize: 30,
         marginBottom: 20,
@@ -227,11 +195,11 @@ const styles = StyleSheet.create({
     },
     languageListContainer: {
         backgroundColor: Colors.mainBackground,
-        flex:1,
+        flex: 1,
         width: '80%',
         marginTop: 20,
         alignItems: 'center',
-        marginBottom:30,
+        marginBottom: 30,
     },
     cardView: {
         borderRadius: 10,

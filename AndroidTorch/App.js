@@ -7,26 +7,7 @@ import React from 'react'
 const App = () => {
  // SplashScreen.hide();
 
-  if(process.env.NODE_ENV === 'production') {
-    // eslint-disable-next-line
-    console = {};
-    console.log = () => {};
-    console.error = () => {};
-    console.warn = () => {};
   
-    console.assert = () => {};
-    console.clear = () => {};
-    console.count = () => {};
-    console.group = () => {};
-    console.groupCollapsed = () => {};
-    console.groupEnd = () => {};
-    console.info = () => {};
-    console.table = () => {};
-    console.time = () => {};
-    console.timeEnd = () => {};
-    console.trace = () => {};
-  
-  }
   return (
        <Bridge/>
   );
